@@ -2,7 +2,7 @@ resolvers in ThisBuild ++= Seq("Apache Development Snapshot Repository" at "http
   "Artima Maven Repository" at "http://repo.artima.com/releases",
   Resolver.mavenLocal)
 
-name := "focus"
+name := "crawler"
 
 version := "0.1-SNAPSHOT"
 
@@ -11,14 +11,16 @@ organization := "ru.wobot"
 scalaVersion in ThisBuild := "2.11.8"
 
 val flinkVersion = "1.1.2"
-val scalatestVersion = "3.0.0"
+val jsoupVersion = "1.9.2"
 val scalacticVersion = "3.0.0"
+val scalatestVersion = "3.0.0"
 val mockitoVersion = "2.0.2-beta"
 
 val flinkDependencies = Seq(
   "org.apache.flink" %% "flink-scala" % flinkVersion % "provided",
   "org.apache.flink" %% "flink-streaming-scala" % flinkVersion % "provided",
-  "org.scalactic" %% "scalactic" % scalacticVersion,
+  "org.apache.flink" %% "flink-streaming-scala" % flinkVersion % "provided",
+  "org.jsoup" % "jsoup" % jsoupVersion,
   "org.scalatest" %% "scalatest" % scalatestVersion % "test",
   "org.mockito" % "mockito-all" % mockitoVersion % "test"
 )
