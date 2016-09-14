@@ -6,9 +6,6 @@ import ru.wobot.crawl.{Fetch, Parsed, Parser, SuccessFetch}
 
 class ParseFlatMapFunction(parsers: List[Parser]) extends FlatMapFunction[Fetch, Parsed] {
   override def flatMap(fetch: Fetch, out: Collector[Parsed]): Unit = {
-    parsers(0).parse("http://localhost1", "data")
-    parsers(0).parse("http://localhost2", "data")
-
     fetch match {
       case f: SuccessFetch[String] => {
         for (parser <- parsers) {
