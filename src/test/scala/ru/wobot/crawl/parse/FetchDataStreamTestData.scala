@@ -4,8 +4,8 @@ import org.apache.flink.api.scala._
 import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment}
 import ru.wobot.crawl.{Fetch, SuccessFetch}
 
-object FetchDataSets {
-  def getFetchDataSet(env: StreamExecutionEnvironment): DataStream[Fetch] ={
+object FetchDataStreamTestData {
+  def getFetchDataStream(env: StreamExecutionEnvironment): DataStream[Fetch] ={
     val coll: List[Fetch] = List[Fetch](
       SuccessFetch[String]("http://localhost1", 1473860919641l, "data"),
       SuccessFetch[String]("http://localhost2", 1473860919642l, "data"),

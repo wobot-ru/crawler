@@ -10,9 +10,7 @@ class ParseFlatMapFunction(parsers: List[Parser]) extends FlatMapFunction[Fetch,
       case f: SuccessFetch[String] => {
         for (parser <- parsers) {
           if (parser.isUriMatch(fetch.uri)) {
-
-
-            out.collect(parser.parse(fetch.uri, f.data))
+            out.collect(parser.parse(fetch.uri, f.content))
           }
         }
       }

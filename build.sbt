@@ -20,6 +20,7 @@ val flinkDependencies = Seq(
   "org.apache.flink" %% "flink-scala" % flinkVersion % "provided",
   "org.apache.flink" %% "flink-streaming-scala" % flinkVersion % "provided",
   "org.apache.flink" %% "flink-streaming-scala" % flinkVersion % "provided",
+  "org.apache.flink" %% "flink-streaming-contrib" % flinkVersion % "test",
   "org.jsoup" % "jsoup" % jsoupVersion,
   "org.scalatest" %% "scalatest" % scalatestVersion % "test",
   "org.mockito" % "mockito-all" % mockitoVersion % "test"

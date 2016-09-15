@@ -9,7 +9,7 @@ import ru.wobot.crawl.FbSearchParser
 class FbSearchParserSpec extends FlatSpec with MockitoSugar {
   val searchData = IOUtils.toString(getClass.getResource("/ru/wobot/crawl/parse/fb/search.html"))
   val url = "https://www.facebook.com/search/str/%D1%82%D0%B5%D0%BB%D0%B52/stories-keyword/this-week/date/stories/intersect"
-  val parser = new FbSearchParser()
+  val parser = FbSearchParser()
 
   behavior of "When parse FaceBook HTML response"
 
@@ -17,7 +17,7 @@ class FbSearchParserSpec extends FlatSpec with MockitoSugar {
     searchData should (not be (null))
   }
 
-  it should "parse work" in {
+  it should "work" in {
     parser.parse(url, searchData)
   }
 }
