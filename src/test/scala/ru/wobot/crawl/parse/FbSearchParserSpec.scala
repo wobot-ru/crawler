@@ -4,7 +4,6 @@ import org.apache.commons.io.IOUtils
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.Matchers._
-import ru.wobot.crawl.FbSearchParser
 
 class FbSearchParserSpec extends FlatSpec with MockitoSugar {
   val searchData = IOUtils.toString(getClass.getResource("/ru/wobot/crawl/parse/fb/search.html"))
