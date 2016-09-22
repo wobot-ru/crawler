@@ -15,6 +15,7 @@ val jsoupVersion = "1.9.2"
 val scalacticVersion = "3.0.0"
 val scalatestVersion = "3.0.0"
 val mockitoVersion = "2.0.2-beta"
+val playVersion = "2.5.4"
 
 val flinkDependencies = Seq(
   "org.apache.flink" %% "flink-scala" % flinkVersion % "provided",
@@ -22,6 +23,7 @@ val flinkDependencies = Seq(
   "org.apache.flink" %% "flink-streaming-scala" % flinkVersion % "provided",
   "org.apache.flink" %% "flink-streaming-contrib" % flinkVersion % "test",
   "org.jsoup" % "jsoup" % jsoupVersion,
+  //"com.typesafe.play" %% "play-ws" % playVersion,
   "org.scalatest" %% "scalatest" % scalatestVersion % "test",
   "org.mockito" % "mockito-all" % mockitoVersion % "test"
 )

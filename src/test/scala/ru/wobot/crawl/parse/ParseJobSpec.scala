@@ -11,21 +11,21 @@ import org.apache.flink.contrib.streaming.scala.utils._
 import org.scalatest.Matchers._
 
 class ParseJobSpec extends FlatSpec with MockitoSugar {
-  implicit val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
-
   //  val service = mock[SourceProvider]
   //  when(service.getSource[Fetch]()).thenReturn(FetchDataSets.getFetchDataSet(env))
-
   val parser = mock[Parser](withSettings().serializable(SerializableMode.ACROSS_CLASSLOADERS))
   when(parser.isUriMatch(any[String])).thenReturn(true)
-  when(parser.parse(any[String], any[String])).thenReturn(new SuccessParsed[String]("", ""))
+  when(parser.parse(any[String], any[String])).thenReturn(SuccessParsed("", ""))
+  implicit val env = StreamExecutionEnvironment.getExecutionEnvironment
+  val in: DataStream[Fetched] = FetchDataStreamTestData.getFetchDataStream(env)
 
-  behavior of "When parseJob created and executed"
+  val transform = new ParseTransform(in, List(parser))
+  behavior of "When the parseJob create and getOutput"
 
   it should "parse all elements" in {
-    val transform = new ParseTransform(FetchDataStreamTestData.getFetchDataStream(env), List[Parser](parser))
-    val inputs = FetchDataStreamTestData.getFetchDataStream(env).collect().count(_ => true)
-    val outputs = transform.getOutput().collect().count(_ => true)
+
+    val inputs = in.collect.count(_ => true)
+    val outputs = transform.getOutput.collect.count(_ => true)
     outputs shouldEqual inputs
   }
   //  it should "invoke the SourceProvider.getSource method" in {
