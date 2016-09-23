@@ -1,12 +1,13 @@
 package ru.wobot.crawl.fetch
 
-import org.apache.flink.api.scala._
-import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment}
-import ru.wobot.crawl.URI
-
 object SeedsDataStreamTestData {
-  def getSeeds(implicit env: StreamExecutionEnvironment): DataStream[URI] = {
-    val coll: List[URI] = List[URI](
+
+  import org.apache.flink.api.scala._
+  import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment}
+  import ru.wobot.crawl.Uri
+
+  def getSeeds(implicit env: StreamExecutionEnvironment): DataStream[Uri] = {
+    val coll = List[Uri](
       "http://localhost1",
       "http://localhost2",
       "http://localhost3",

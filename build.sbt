@@ -16,12 +16,14 @@ val scalacticVersion = "3.0.0"
 val scalatestVersion = "3.0.0"
 val mockitoVersion = "2.0.2-beta"
 val playVersion = "2.5.4"
+val ficusVersion = "1.2.3"
 
 val flinkDependencies = Seq(
   "org.apache.flink" %% "flink-scala" % flinkVersion % "provided",
   "org.apache.flink" %% "flink-streaming-scala" % flinkVersion % "provided",
   "org.apache.flink" %% "flink-streaming-scala" % flinkVersion % "provided",
   "org.apache.flink" %% "flink-streaming-contrib" % flinkVersion % "test",
+  "com.iheart" %% "ficus" % ficusVersion,
   "org.jsoup" % "jsoup" % jsoupVersion,
   //"com.typesafe.play" %% "play-ws" % playVersion,
   "org.scalatest" %% "scalatest" % scalatestVersion % "test",
@@ -36,7 +38,7 @@ lazy val root = (project in file(".")).
 mainClass in assembly := Some("ru.wobot.Job")
 
 // make run command include the provided dependencies
-run in Compile <<= Defaults.runTask(fullClasspath in Compile, mainClass in (Compile, run), runner in (Compile, run))
+run in Compile <<= Defaults.runTask(fullClasspath in Compile, mainClass in(Compile, run), runner in(Compile, run))
 
 // exclude Scala library from assembly
 assemblyOption in assembly := (assemblyOption in assembly).value.copy(includeScala = false)
