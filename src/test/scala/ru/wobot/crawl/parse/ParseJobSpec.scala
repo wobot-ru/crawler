@@ -19,7 +19,7 @@ class ParseJobSpec extends FlatSpec with MockitoSugar {
   implicit val env = StreamExecutionEnvironment.getExecutionEnvironment
   val in: DataStream[Fetched] = FetchDataStreamTestData.getFetchDataStream(env)
 
-  val transform = new ParseTransform(in, List(parser))
+  val transform = new ParseJob(in, List(parser))
   behavior of "When the parseJob create and getOutput"
 
   it should "parse all elements" in {

@@ -2,6 +2,7 @@ package ru.wobot.crawl.fetch
 
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
+import ru.wobot.crawl.fetch.FetcherFactory.HttpFetcher
 
 class HttpFetcherSmokeTest extends FlatSpec with MockitoSugar {
 

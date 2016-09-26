@@ -1,5 +1,6 @@
 package ru.wobot
 
+import org.apache.flink.streaming.api.functions.sink.SinkFunction
 import org.apache.flink.streaming.api.scala.DataStream
 
 package object crawl {
@@ -51,6 +52,10 @@ package object crawl {
     def getSource(): DataStream[T]
   }
 
+  trait SinkProvider[T] {
+    def getSinks(): List[SinkFunction[T]]
+  }
+
   case class Uri(uri: URI, metadata: Meta) extends UriLike {
     override def toString: URI = uri
   }
@@ -71,5 +76,7 @@ package object crawl {
 
     def apply(uri: URI): Uri = apply(uri, collection.immutable.Map.empty)
   }
+
+  class Regestry
 
 }

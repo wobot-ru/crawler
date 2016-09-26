@@ -3,7 +3,8 @@ package ru.wobot.crawl
 
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
-import ru.wobot.crawl.fetch.{TextFileUriSourceProvider, UriSourceProvider}
+import ru.wobot.crawl.fetch.UriSourceProvider
+import ru.wobot.crawl.fetch.UriSourceProvider.TextFileUriSourceProvider
 
 class TextFileUriSourceProviderTest extends FlatSpec with MockitoSugar {
 
