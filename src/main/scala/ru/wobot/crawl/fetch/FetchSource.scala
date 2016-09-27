@@ -1,17 +1,17 @@
 package ru.wobot.crawl.fetch
 
 import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment}
-import ru.wobot.crawl.fetch.FetchJob.UriSourceProvider
+import ru.wobot.crawl.fetch.FetchJob.FetchSource
 
 
-object UriSourceProvider {
-  def fromParam(param: Map[String, String])(implicit env: StreamExecutionEnvironment): UriSourceProvider = {
+object FetchSource {
+  def fromParam(param: Map[String, String])(implicit env: StreamExecutionEnvironment): FetchSource = {
     () => new TextFileUriSourceProvider(param)(env).getSource()
   }
 
   class TextFileUriSourceProvider(params: Map[String, String])(implicit env: StreamExecutionEnvironment) {
 
-    import UriSourceProvider.CLI_CONST.URI_PATH
+    import FetchSource.CLI_CONST.URI_PATH
     import org.apache.flink.api.scala._
     import ru.wobot.crawl.Uri
 

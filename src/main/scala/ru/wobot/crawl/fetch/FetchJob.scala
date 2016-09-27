@@ -19,8 +19,8 @@ class FetchJob(source: => DataStream[Uri], sinks: => List[SinkFunction[Fetched]]
 }
 
 object FetchJob {
-  type UriSourceProvider = () => DataStream[Uri]
-  type FetchedSinksProvider = () => List[SinkFunction[Fetched]]
+  type FetchSource = () => DataStream[Uri]
+  type FetchSinks = () => List[SinkFunction[Fetched]]
   type FetcherFactory = () => List[Fetcher]
 
 
@@ -29,8 +29,8 @@ object FetchJob {
     val p: ParameterTool = ParameterTool.fromArgs(args)
     val params: Map[String, String] = p.toMap.toMap
 
-    val stream: UriSourceProvider = UriSourceProvider.fromParam(params)
-    val param: FetchedSinksProvider = FetchedSinkProvider.fromParam(params)
+    val stream: FetchSource = FetchSource.fromParam(params)
+    val param: FetchSinks = FetchSinks.fromParam(params)
     val job: FetchJob = FetchJob(stream, param, FetcherFactory.fromParam(params))
     job.getOutput().print()
     //    val seeds: DataStream[Uri] = env.fromElements("https://twitter.com", "https://facebook.com", "http://facebook.com", "http://vk.com", "http://production.wobot.ru", "http://wobot.ru", "http://www.wobot.ru", "https://mail.ru", "https://vk.com", "http://www.ya.ru", "https://ya.ru", "http://mail.ru")
@@ -39,7 +39,7 @@ object FetchJob {
     env.execute("FetchJob")
   }
 
-  def apply(uriProv: => UriSourceProvider, sinksProv: => FetchedSinksProvider, factory: => FetcherFactory): FetchJob =
+  def apply(uriProv: => FetchSource, sinksProv: => FetchSinks, factory: => FetcherFactory): FetchJob =
     new FetchJob(uriProv(), sinksProv(), factory())
 
   def apply(source: DataStream[Uri], sinks: List[SinkFunction[Fetched]], fetchers: List[Fetcher]): FetchJob = new FetchJob(source, sinks, fetchers)

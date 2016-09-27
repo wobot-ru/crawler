@@ -3,6 +3,8 @@ package ru.wobot
 import org.apache.flink.streaming.api.functions.sink.SinkFunction
 import org.apache.flink.streaming.api.scala.DataStream
 
+import scala.collection.immutable
+
 package object crawl {
 
   type URI = String
@@ -34,18 +36,17 @@ package object crawl {
 
   trait Parsed
 
-  trait Parser {
+  @SerialVersionUID(1L)
+  trait Parser extends Serializable {
     def parse(uri: URI, content: String): Parsed
 
     def isUriMatch(uri: URI): Boolean
   }
 
-  trait Document[T] {
-    def uri: URI
+  trait Document extends WithMeta {
+    def id: String
 
-    def content: T
-
-    def metadata: Meta
+    def toJson: String
   }
 
   trait SourceProvider[T] {
@@ -66,7 +67,13 @@ package object crawl {
 
   case class SuccessParsed[T](uri: URI, content: T) extends Parsed
 
-  case class Post(url: URI, date: String, profileName: String, profileUrl: String, body: String, likes: Long, reposts: Long, comments: Long, title: Option[String], city: Option[String])
+  case class Post(url: URI, date: String, profileName: String, profileUrl: String, body: String, likes: Long, reposts: Long, comments: Long, title: Option[String], city: Option[String], meta: Meta = immutable.Map.empty) extends Document {
+    override def id: String = id
+
+    override def toJson: String = s"{id=$id}"
+
+    override def metadata: Meta = meta
+  }
 
 
   object Uri {
@@ -76,4 +83,5 @@ package object crawl {
 
     def apply(uri: URI): Uri = apply(uri, collection.immutable.Map.empty)
   }
+
 }

@@ -9,14 +9,12 @@ class ParseJob(source: => DataStream[Fetched], parsers: => List[Parser]) {
 }
 
 object ParseJob {
-  type SourceProvider = () => DataStream[Fetched]
+  type ParseSource = () => DataStream[Fetched]
   type ParserFactory = () => List[Parser]
 
   def main(args: Array[String]): Unit = {
 
   }
 
-  //def apply(source: => DataStream[Fetched], parsers: => List[Parser]): ParseJob = new ParseJob(source, parsers)
-
-  def apply(src: => SourceProvider, p: => ParserFactory): ParseJob = new ParseJob(src(), p())
+  def apply(src: => ParseSource, p: => ParserFactory): ParseJob = new ParseJob(src(), p())
 }

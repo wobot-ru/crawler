@@ -3,8 +3,8 @@ package ru.wobot.crawl
 
 import org.scalatest.FlatSpec
 import org.scalatest.mockito.MockitoSugar
-import ru.wobot.crawl.fetch.UriSourceProvider
-import ru.wobot.crawl.fetch.UriSourceProvider.TextFileUriSourceProvider
+import ru.wobot.crawl.fetch.FetchSource
+import ru.wobot.crawl.fetch.FetchSource.TextFileUriSourceProvider
 
 class TextFileUriSourceProviderTest extends FlatSpec with MockitoSugar {
 
@@ -13,7 +13,7 @@ class TextFileUriSourceProviderTest extends FlatSpec with MockitoSugar {
   import org.scalatest.Matchers._
 
   val seedsPath = "file:///" + getClass.getResource("/ru/wobot/crawl/seeds.txt").getPath
-  val param = Map(UriSourceProvider.CLI_CONST.URI_PATH -> seedsPath)
+  val param = Map(FetchSource.CLI_CONST.URI_PATH -> seedsPath)
   implicit val env = StreamExecutionEnvironment.createLocalEnvironment()
   val provider = new TextFileUriSourceProvider(param)
   val source = provider.getSource()

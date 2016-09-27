@@ -2,7 +2,7 @@ package ru.wobot.crawl.parse
 
 import ru.wobot.crawl._
 
-case class FbSearchParser() extends Parser {
+class FbSearchParser extends Parser {
   val FACEBOOK_URL = "https://www.facebook.com/"
 
   import java.net.URL
