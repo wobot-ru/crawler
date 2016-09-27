@@ -16,15 +16,17 @@ val scalacticVersion = "3.0.0"
 val scalatestVersion = "3.0.0"
 val mockitoVersion = "2.0.2-beta"
 val playVersion = "2.5.4"
-val ficusVersion = "1.2.3"
+//val ficusVersion = "1.2.3"
+val mongoVersion = "2.0.0-rc0"
 
 val flinkDependencies = Seq(
   "org.apache.flink" %% "flink-scala" % flinkVersion % "provided",
   "org.apache.flink" %% "flink-streaming-scala" % flinkVersion % "provided",
   "org.apache.flink" %% "flink-streaming-scala" % flinkVersion % "provided",
   "org.apache.flink" %% "flink-streaming-contrib" % flinkVersion % "test",
-  "com.iheart" %% "ficus" % ficusVersion,
+  //"com.iheart" %% "ficus" % ficusVersion,
   "org.jsoup" % "jsoup" % jsoupVersion,
+  "org.mongodb.mongo-hadoop" % "mongo-hadoop-core" % mongoVersion,
   //"com.typesafe.play" %% "play-ws" % playVersion,
   "org.scalatest" %% "scalatest" % scalatestVersion % "test",
   "org.mockito" % "mockito-all" % mockitoVersion % "test"
