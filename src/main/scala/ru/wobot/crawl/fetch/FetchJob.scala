@@ -8,7 +8,7 @@ import ru.wobot.crawl.{Fetched, _}
 
 import scala.collection.JavaConversions._
 
-class FetchJob(source: DataStream[Uri], sinks: List[SinkFunction[Fetched]], fetchers: List[Fetcher]) {
+class FetchJob(source: => DataStream[Uri], sinks: => List[SinkFunction[Fetched]], fetchers: => List[Fetcher]) {
   def getOutput(): DataStream[Fetched] = {
     val output = source.flatMap(new FetchMapFunction[Uri](fetchers))
     for (s <- sinks) {
@@ -39,11 +39,8 @@ object FetchJob {
     env.execute("FetchJob")
   }
 
-//  def apply(uriProv: UriSourceProvider, sinksProv: FetchedSinkProvider, factory: FetcherFactory): FetchJob =
-//    FetchJob(uriProv.getSource, sinksProv.getSinks(), factory.getFetchers())
-
-  def apply(uriProv: UriSourceProvider, sinksProv: FetchedSinksProvider, factory: FetcherFactory): FetchJob =
-    FetchJob(uriProv(), sinksProv(), factory())
+  def apply(uriProv: => UriSourceProvider, sinksProv: => FetchedSinksProvider, factory: => FetcherFactory): FetchJob =
+    new FetchJob(uriProv(), sinksProv(), factory())
 
   def apply(source: DataStream[Uri], sinks: List[SinkFunction[Fetched]], fetchers: List[Fetcher]): FetchJob = new FetchJob(source, sinks, fetchers)
 }

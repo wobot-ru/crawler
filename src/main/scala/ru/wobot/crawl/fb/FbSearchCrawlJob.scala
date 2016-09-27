@@ -18,10 +18,12 @@ object FbSearchCrawlJob {
     val fetchJob = FetchJob(UriSourceProvider.fromParam(params), FetchedSinkProvider.fromParam(params), FetcherFactory.fromParam(params))
     //fetchJob.getOutput().print()
     val parseSrc: SourceProvider = () => fetchJob.getOutput
+
     val parserFactory: ParserFactory = () => List[Parser](new FbSearchParser)
     val parseJob: ParseJob = ParseJob(parseSrc, parserFactory)
-//    val output: DataStream[Parsed] = parseJob.getOutput()
-//    output.print()
+    val output: DataStream[Parsed] = parseJob.getOutput()
+    output.print()
+
     env.execute("FbSearchCrawlJob")
   }
 
