@@ -14,7 +14,6 @@ import ru.wobot.crawl.parse.{FbSearchParser, ParseJob}
 
 import scala.collection.JavaConversions._
 
-
 object FbSearchJob {
   final val FB_QUERY = "fb-query"
   final val FB_PAGES = "fb-pages"
@@ -38,13 +37,12 @@ object FbSearchJob {
     val indexJob: IndexJob = IndexJob(indexSrc)
 
     indexJob.getOutput().print()
-
     env.execute("FbSearchCrawlJob")
   }
 
   def getFetchSrcFromQueryFile(queryPath: String, pages: Int, height: Int)(implicit env: StreamExecutionEnvironment): FetchSource = {
-    () => env.readTextFile(queryPath).map(x => {
-      val encode: String = URLEncoder.encode(x, "UTF-8")
+    () => env.readTextFile(queryPath).map(q => {
+      val encode: String = URLEncoder.encode(q, "UTF-8").replace("+","%20")
       s"http://127.0.0.1:8888/facebook/search/$encode/$pages/pages/$height/height"
     })
   }

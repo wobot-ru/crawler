@@ -40,9 +40,14 @@ object http {
     new AhcWSClient(ahcConfig)
   }
 
-  def withRetry[T](retries: Int = 5)(f: => Future[T]): Future[T] =
+  def withPauseRetry[T](pause: Int = 1000, retries: Int = 5)(f: => Future[T]): Future[T] =
     f.recover {
-      case t: Throwable if (retries > 0) => withRetry[T](retries - 1)(f).asInstanceOf
+      case t: Throwable if (retries > 0) =>
+        println("!" * 10)
+        println(s"retries=$retries")
+        println("!" * 10)
+        Thread.sleep(pause)
+        withPauseRetry[T](pause, retries - 1)(f).asInstanceOf
     }
 
   def request(uri: URI): Future[String] = Future {
