@@ -27,7 +27,7 @@ val flinkDependencies = Seq(
   //"com.iheart" %% "ficus" % ficusVersion,
   "org.jsoup" % "jsoup" % jsoupVersion,
   "org.mongodb.mongo-hadoop" % "mongo-hadoop-core" % mongoVersion,
-  //"com.typesafe.play" %% "play-ws" % playVersion,
+  "com.typesafe.play" %% "play-ws" % playVersion,
   "org.scalatest" %% "scalatest" % scalatestVersion % "test",
   "org.mockito" % "mockito-all" % mockitoVersion % "test"
 )

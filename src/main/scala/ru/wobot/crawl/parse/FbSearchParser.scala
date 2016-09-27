@@ -5,10 +5,10 @@ import ru.wobot.crawl._
 case class FbSearchParser() extends Parser {
   val FACEBOOK_URL = "https://www.facebook.com/"
 
-  import org.jsoup.Jsoup
-  import org.jsoup.nodes.Element
-  import org.jsoup.nodes.{Document => SoupDoc}
   import java.net.URL
+
+  import org.jsoup.Jsoup
+  import org.jsoup.nodes.{Element, Document => SoupDoc}
 
   import scala.collection.JavaConversions._
 
@@ -17,9 +17,9 @@ case class FbSearchParser() extends Parser {
   override def parse(uri: String, content: String): Parsed = {
     val document: SoupDoc = Jsoup.parse(content, uri)
     val elements = document.select(".userContentWrapper")
-    for (el <- elements) {
+    val posts = elements.map(el => {
       val (profileUrl, profileName) = getProfile(el)
-      val post = Post(
+      Post(
         url = getPostUrl(el),
         date = getDate(el),
         profileName = profileName,
@@ -31,9 +31,8 @@ case class FbSearchParser() extends Parser {
         title = getTitle(el),
         city = getCity(el)
       )
-      System.out.println(post)
-    }
-    new SuccessParsed[String](uri, content)
+    })
+    new SuccessParsed[List[Post]](uri, posts.toList)
   }
 
   def getProfile(el: Element): (String, String) = {
@@ -78,6 +77,13 @@ case class FbSearchParser() extends Parser {
     optionForEmpty(e.text())
   }
 
+  private def optionForEmpty(s: String): Option[String] = {
+    if (s.isEmpty)
+      None
+    else
+      Some(s)
+  }
+
   def getBody(el: Element): String = {
     val e = el.select(".userContent")
     e.text()
@@ -94,6 +100,13 @@ case class FbSearchParser() extends Parser {
     zeroForEmpty(e.text().replace(" ", "").replace("Комментарии:", ""))
   }
 
+  private def zeroForEmpty(s: String): Long = {
+    if (s.isEmpty)
+      0
+    else
+      s.toLong
+  }
+
   //todo: add support for non Russian
   def getReposts(el: Element): Long = {
     val e = el.select("._36_q:nth-of-type(2)")
@@ -103,19 +116,5 @@ case class FbSearchParser() extends Parser {
   def getLikes(el: Element): Long = {
     val e = el.select("._4arz")
     zeroForEmpty(e.text())
-  }
-
-  private def zeroForEmpty(s: String): Long = {
-    if (s.isEmpty)
-      0
-    else
-      s.toLong
-  }
-
-  private def optionForEmpty(s: String): Option[String] = {
-    if (s.isEmpty)
-      None
-    else
-      Some(s)
   }
 }

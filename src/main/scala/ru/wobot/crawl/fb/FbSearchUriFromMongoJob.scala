@@ -39,7 +39,7 @@ object FbSearchUriFromMongoJob {
 
     val uri: DataSet[(String, String)] = query
       .map(x => (x, URLEncoder.encode(x, "UTF-8")))
-      .map((tuple: (String, String)) => (tuple._1, s"http://127.0.0.1:8888/facebook/search/${tuple._2}/15/pages/100000/height"))
+      .map((tuple: (String, String)) => (tuple._1, s"http://127.0.0.1:8888/facebook/search/${tuple._2}/2/pages/20000/height"))
 
     if (params.has(URI_OUT)) {
       val p: String = params.get(URI_OUT)

@@ -76,7 +76,4 @@ package object crawl {
 
     def apply(uri: URI): Uri = apply(uri, collection.immutable.Map.empty)
   }
-
-  class Regestry
-
 }
