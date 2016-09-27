@@ -16,6 +16,7 @@ import org.apache.hadoop.mapred.JobConf
 
 object FbSearchUriFromMongoJob {
   final val URI_OUT = "uri-out"
+  final val QUERY_OUT = "query-out"
 
   def main(args: Array[String]) {
     val params = ParameterTool.fromArgs(args)
@@ -36,6 +37,14 @@ object FbSearchUriFromMongoJob {
         query
       }
     })
+
+    if (params.has(QUERY_OUT)) {
+      val q: String = params.get(QUERY_OUT)
+      println("-" * 10)
+      println(s"Store QUERY to: $q")
+      println("-" * 10)
+      query.writeAsText(q, WriteMode.OVERWRITE).setParallelism(1)
+    }
 
     val uri: DataSet[(String, String)] = query
       .map(x => (x, URLEncoder.encode(x, "UTF-8")))
