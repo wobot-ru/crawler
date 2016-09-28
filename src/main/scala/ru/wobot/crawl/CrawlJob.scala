@@ -15,7 +15,7 @@ object CrawlJob {
     implicit val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
     val params = ParameterTool.fromArgs(args).toMap.toMap
 
-    val fetchJob = FetchJob(FetchSource.fromParam(params), FetchSinks.fromParam(params), FetcherFactory.fromParam(params))
+    val fetchJob = FetchJob(FetchSource.fromMap(params), FetchSinks.fromMap(params), FetcherFactory.fromMap(params))
     val parseJob: ParseJob = ParseJob(() => fetchJob.getOutput, () => List[Parser](new FbSearchParser))
     val indexJob: IndexJob = IndexJob(() => parseJob.getOutput())
 

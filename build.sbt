@@ -22,7 +22,7 @@ val mongoVersion = "2.0.0-rc0"
 val flinkDependencies = Seq(
   "org.apache.flink" %% "flink-scala" % flinkVersion % "provided",
   "org.apache.flink" %% "flink-streaming-scala" % flinkVersion % "provided",
-  "org.apache.flink" %% "flink-streaming-scala" % flinkVersion % "provided",
+  "org.apache.flink" %% "flink-connector-kafka-0.9" % flinkVersion,
   "org.apache.flink" %% "flink-streaming-contrib" % flinkVersion % "test",
   //"com.iheart" %% "ficus" % ficusVersion,
   "org.jsoup" % "jsoup" % jsoupVersion,

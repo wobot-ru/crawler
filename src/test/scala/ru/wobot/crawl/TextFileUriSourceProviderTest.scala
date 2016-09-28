@@ -13,7 +13,7 @@ class TextFileUriSourceProviderTest extends FlatSpec with MockitoSugar {
   import org.scalatest.Matchers._
 
   val seedsPath = "file:///" + getClass.getResource("/ru/wobot/crawl/seeds.txt").getPath
-  val param = Map(FetchSource.CLI_CONST.URI_PATH -> seedsPath)
+  val param = Map(FetchSource.FETCH_IN_TXT_PATH -> seedsPath)
   implicit val env = StreamExecutionEnvironment.createLocalEnvironment()
   val provider = new TextFileUriSourceProvider(param)
   val source = provider.getSource()

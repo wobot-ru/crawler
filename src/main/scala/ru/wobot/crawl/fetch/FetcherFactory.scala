@@ -7,7 +7,7 @@ object FetcherFactory {
   import ru.wobot.crawl.Fetcher
   import ru.wobot.crawl.fetch.FetchJob.FetcherFactory
 
-  def fromParam(param: Map[String, String]): FetcherFactory = {
+  def fromMap(param: Map[String, String]): FetcherFactory = {
     () => List(new HttpFetcher)
   }
 

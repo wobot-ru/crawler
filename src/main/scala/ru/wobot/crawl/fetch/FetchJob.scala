@@ -19,7 +19,7 @@ class FetchJob(source: => DataStream[Uri], sinks: => List[SinkFunction[Fetched]]
 }
 
 object FetchJob {
-  type FetchSource = () => DataStream[Uri]
+  type Input = () => DataStream[Uri]
   type FetchSinks = () => List[SinkFunction[Fetched]]
   type FetcherFactory = () => List[Fetcher]
 
@@ -28,10 +28,9 @@ object FetchJob {
     implicit val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
     val p: ParameterTool = ParameterTool.fromArgs(args)
     val params: Map[String, String] = p.toMap.toMap
-
-    val stream: FetchSource = FetchSource.fromParam(params)
-    val param: FetchSinks = FetchSinks.fromParam(params)
-    val job: FetchJob = FetchJob(stream, param, FetcherFactory.fromParam(params))
+    val stream: Input = FetchSource.fromMap(params)
+    val param: FetchSinks = FetchSinks.fromMap(params)
+    val job: FetchJob = FetchJob(stream, param, FetcherFactory.fromMap(params))
     job.getOutput().print()
     //    val seeds: DataStream[Uri] = env.fromElements("https://twitter.com", "https://facebook.com", "http://facebook.com", "http://vk.com", "http://production.wobot.ru", "http://wobot.ru", "http://www.wobot.ru", "https://mail.ru", "https://vk.com", "http://www.ya.ru", "https://ya.ru", "http://mail.ru")
     //    seeds.writeAsCsv("C:\\src\\focus\\src\\test\\resources\\ru\\wobot\\crawl\\seeds.csv", WriteMode.OVERWRITE).setParallelism(1)
@@ -39,7 +38,7 @@ object FetchJob {
     env.execute("FetchJob")
   }
 
-  def apply(uriProv: => FetchSource, sinksProv: => FetchSinks, factory: => FetcherFactory): FetchJob =
+  def apply(uriProv: => Input, sinksProv: => FetchSinks, factory: => FetcherFactory): FetchJob =
     new FetchJob(uriProv(), sinksProv(), factory())
 
   def apply(source: DataStream[Uri], sinks: List[SinkFunction[Fetched]], fetchers: List[Fetcher]): FetchJob = new FetchJob(source, sinks, fetchers)

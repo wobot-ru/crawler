@@ -1,5 +1,10 @@
 package ru.wobot.crawl.net
 
+import java.net.URLDecoder
+
+import org.apache.http.client.utils.URLEncodedUtils
+
+
 object http {
 
   import akka.stream.ActorMaterializer
@@ -54,5 +59,9 @@ object http {
     val f = Source.fromURL(uri)
     try f.mkString
     finally f.close()
+  }
+
+  def close(): Unit = {
+    ws.close()
   }
 }

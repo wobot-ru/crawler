@@ -1,7 +1,10 @@
 package ru.wobot
 
+import java.util.Properties
+
+import org.apache.flink.api.scala.typeutils.CaseClassTypeInfo
 import org.apache.flink.streaming.api.functions.sink.SinkFunction
-import org.apache.flink.streaming.api.scala.DataStream
+import org.apache.flink.streaming.api.scala._
 
 import scala.collection.immutable
 
@@ -9,6 +12,8 @@ package object crawl {
 
   type URI = String
   type Meta = Map[String, Any]
+  implicit val postTI = createTypeInformation[Post].asInstanceOf[CaseClassTypeInfo[Post]]
+  implicit val fetchedTI = createTypeInformation[Fetched]
 
   trait WithUri {
     def uri: URI
@@ -75,7 +80,6 @@ package object crawl {
     override def metadata: Meta = meta
   }
 
-
   object Uri {
     implicit def toURI(s: WithUri): URI = s.uri
 
@@ -83,5 +87,16 @@ package object crawl {
 
     def apply(uri: URI): Uri = apply(uri, collection.immutable.Map.empty)
   }
+  object MapUtil {
+    def getRequired(map: Map[String, String], key: String): String = map.get(key).fold(sys.error(s"$key is required"))(x => x)
 
+    def toPropWithPrefix(map: Map[String, String], prefix: String): Properties = {
+      val props = new Properties()
+      map.foreach(p => {
+        val (k, v) = p
+        if (k.startsWith(prefix)) props.setProperty(k.substring(prefix.length), v)
+      })
+      props
+    }
+  }
 }
