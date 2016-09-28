@@ -2,6 +2,9 @@ package ru.wobot.crawl.parse
 
 import ru.wobot.crawl._
 
+import scala.collection.immutable.Map
+import scala.util.control.NonFatal
+
 class FbSearchParser extends Parser {
   val FACEBOOK_URL = "https://www.facebook.com/"
 
@@ -14,7 +17,7 @@ class FbSearchParser extends Parser {
 
   override def isUriMatch(uri: String): Boolean = true
 
-  override def parse(uri: String, content: String): Parsed = {
+  override def parse(uri: String, content: String): Parsed = try {
     val document: SoupDoc = Jsoup.parse(content, uri)
     val elements = document.select(".userContentWrapper")
     val posts = elements.map(el => {
@@ -32,7 +35,10 @@ class FbSearchParser extends Parser {
         city = getCity(el)
       )
     })
-    new SuccessParsed[List[Post]](uri, posts.toList)
+    SuccessParsed(uri, Map.empty, posts.toList)
+  }
+  catch {
+    case NonFatal(ex) => FailureParsed(uri, Map.empty, ex)
   }
 
   def getProfile(el: Element): (String, String) = {
@@ -100,13 +106,6 @@ class FbSearchParser extends Parser {
     zeroForEmpty(e.text().replace(" ", "").replace("Комментарии:", ""))
   }
 
-  private def zeroForEmpty(s: String): Long = {
-    if (s.isEmpty)
-      0
-    else
-      s.toLong
-  }
-
   //todo: add support for non Russian
   def getReposts(el: Element): Long = {
     val e = el.select("._36_q:nth-of-type(2)")
@@ -115,6 +114,15 @@ class FbSearchParser extends Parser {
 
   def getLikes(el: Element): Long = {
     val e = el.select("._4arz")
-    zeroForEmpty(e.text())
+    zeroForEmpty(replaceNumeralsToDigit(e.text()))
   }
+
+  private def zeroForEmpty(s: String): Long = {
+    if (s.isEmpty)
+      0
+    else
+      s.toLong
+  }
+
+  private def replaceNumeralsToDigit(s: String): String = s.replace(" тыс.", "000")
 }

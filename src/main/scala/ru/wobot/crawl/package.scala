@@ -15,6 +15,13 @@ package object crawl {
   implicit val postTI = createTypeInformation[Post].asInstanceOf[CaseClassTypeInfo[Post]]
   implicit val fetchedTI = createTypeInformation[Fetched]
 
+
+  sealed trait Fetched extends UriLike {
+    def fetchDate: Long
+  }
+
+  sealed trait Parsed extends UriLike
+
   trait WithUri {
     def uri: URI
   }
@@ -25,10 +32,6 @@ package object crawl {
 
   trait UriLike extends WithUri with WithMeta
 
-  trait Fetched extends UriLike {
-    def fetchDate: Long
-  }
-
   @SerialVersionUID(1L)
   trait Fetcher extends Serializable {
 
@@ -38,8 +41,6 @@ package object crawl {
 
     def canFetch(uri: URI): Boolean
   }
-
-  trait Parsed
 
   @SerialVersionUID(1L)
   trait Parser extends Serializable {
@@ -70,10 +71,12 @@ package object crawl {
 
   case class FailureFetched(uri: URI, fetchDate: Long, metadata: Meta, msg: String) extends Fetched
 
-  case class SuccessParsed[T](uri: URI, content: T) extends Parsed
+  case class SuccessParsed[T](uri: URI, metadata: Meta, content: T) extends Parsed
+
+  case class FailureParsed(uri: URI, metadata: Meta, exception: Throwable) extends Parsed
 
   case class Post(url: URI, date: String, profileName: String, profileUrl: String, body: String, likes: Long, reposts: Long, comments: Long, title: Option[String], city: Option[String], meta: Meta = immutable.Map.empty) extends Document {
-    override def id: String = id
+    override def id: String = url
 
     override def toJson: String = s"{id=$id}"
 
@@ -87,6 +90,7 @@ package object crawl {
 
     def apply(uri: URI): Uri = apply(uri, collection.immutable.Map.empty)
   }
+
   object MapUtil {
     def getRequired(map: Map[String, String], key: String): String = map.get(key).fold(sys.error(s"$key is required"))(x => x)
 
@@ -99,4 +103,5 @@ package object crawl {
       props
     }
   }
+
 }
